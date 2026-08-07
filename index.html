@@ -917,49 +917,82 @@
 
     <div class="container">
 
-        <div class="section-heading reveal">
-
-            <p class="eyebrow">
-                WEDDING WISHES
-            </p>
-
-            <h2>Doa & Ucapan</h2>
-
-            <p class="description">
-                Tuliskan doa dan harapan terbaik
-                untuk perjalanan baru kami.
-            </p>
-
+        <div class="section-heading">
+            <p class="eyebrow">WEDDING WISHES</p>
+            <h2>Ucapan & Doa</h2>
         </div>
 
-        <form id="wishForm" class="wish-form reveal">
+        <form id="wishForm">
 
             <input
-                id="guestName"
                 type="text"
+                id="guestName"
                 placeholder="Nama Anda"
+                required
+            >
+
+            <select
+                id="attendance"
+                required
+            >
+                <option value="Hadir">Hadir</option>
+                <option value="Tidak Hadir">Tidak Hadir</option>
+                <option value="Masih Ragu">Masih Ragu</option>
+            </select>
+
+            <input
+                type="number"
+                id="guestCount"
+                min="1"
+                value="1"
                 required
             >
 
             <textarea
                 id="guestMessage"
-                placeholder="Tuliskan doa dan ucapan..."
+                placeholder="Tulis ucapan..."
                 required
             ></textarea>
 
             <button type="submit">
-                Kirim Ucapan ♡
+                Kirim Ucapan
             </button>
 
         </form>
 
-
         <div id="wishList"></div>
+        <div id="loadingMessage" style="display:none;">
+    Memuat ucapan...
+</div>
+        <div class="guest-statistic">
+
+    <h3>Statistik Kehadiran</h3>
+
+    <p>
+        Hadir :
+        <span id="hadirCount">0</span>
+    </p>
+
+    <p>
+        Tidak Hadir :
+        <span id="tidakHadirCount">0</span>
+    </p>
+
+    <p>
+        Masih Ragu :
+        <span id="raguCount">0</span>
+    </p>
+
+    <p>
+        Total Orang :
+        <span id="orangCount">0</span>
+    </p>
+
+</div>
 
     </div>
 
 </section>
-
 
 <!-- CLOSING -->
 
