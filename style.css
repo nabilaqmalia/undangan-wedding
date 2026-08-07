@@ -374,64 +374,104 @@ textarea {
    FLOWERS
 ===================================== */
 
-.cover-flower,
-.decor,
-.closing-flower {
-    position: absolute;
+/* =====================================
+   RESPONSIVE FLOWERS
+===================================== */
 
-    pointer-events: none;
-
-    user-select: none;
+.cover-flower{
+    position:absolute;
+    z-index:1;
+    pointer-events:none;
+    user-select:none;
+    object-fit:contain;
+    transition:.4s ease;
 }
 
-.cover-flower {
-    z-index: 2;
+/* kiri atas */
+.bunga-atas-kiri{
+    top:0;
+    left:0;
+    width:clamp(130px,18vw,320px);
+    transform:translate(-30%,-30%);
 }
 
-.flower-top {
-    width:
-        min(55vw, 320px);
-
-    left: -85px;
-    top: -70px;
-
-    animation:
-        floatFlowerLeft
-        7s ease-in-out
-        infinite alternate;
+/* kanan atas */
+.bunga-atas-kanan{
+    top:0;
+    right:0;
+    width:clamp(130px,18vw,320px);
+    transform:translate(30%,-30%);
 }
 
-.flower-bottom {
-    width:
-        min(58vw, 340px);
-
-    right: -95px;
-    bottom: -80px;
-
-    animation:
-        floatFlowerRight
-        8s ease-in-out
-        infinite alternate;
+/* kiri bawah */
+.bunga-bawah-kiri{
+    bottom:0;
+    left:0;
+    width:clamp(150px,20vw,360px);
+    transform:translate(-30%,30%);
 }
 
-@keyframes floatFlowerLeft {
+/* kanan bawah */
+.bunga-bawah-kanan{
+    bottom:0;
+    right:0;
+    width:clamp(150px,20vw,360px);
+    transform:translate(30%,30%);
+}
 
-    to {
-        transform:
-            translate(12px, 10px)
-            rotate(4deg);
+/* animasi halus */
+
+@keyframes flowerFloatLeft{
+    from{
+        transform:translate(-30%,-30%);
+    }
+    to{
+        transform:translate(-27%,-33%) rotate(2deg);
     }
 }
 
-@keyframes floatFlowerRight {
-
-    to {
-        transform:
-            translate(-12px, -10px)
-            rotate(-4deg);
+@keyframes flowerFloatRight{
+    from{
+        transform:translate(30%,-30%);
+    }
+    to{
+        transform:translate(27%,-33%) rotate(-2deg);
     }
 }
 
+@keyframes flowerFloatBottomLeft{
+    from{
+        transform:translate(-30%,30%);
+    }
+    to{
+        transform:translate(-27%,27%) rotate(-2deg);
+    }
+}
+
+@keyframes flowerFloatBottomRight{
+    from{
+        transform:translate(30%,30%);
+    }
+    to{
+        transform:translate(27%,27%) rotate(2deg);
+    }
+}
+
+.bunga-atas-kiri{
+    animation:flowerFloatLeft 7s ease-in-out infinite alternate;
+}
+
+.bunga-atas-kanan{
+    animation:flowerFloatRight 7s ease-in-out infinite alternate;
+}
+
+.bunga-bawah-kiri{
+    animation:flowerFloatBottomLeft 8s ease-in-out infinite alternate;
+}
+
+.bunga-bawah-kanan{
+    animation:flowerFloatBottomRight 8s ease-in-out infinite alternate;
+}
 
 /* =====================================
    MAIN
@@ -2423,4 +2463,74 @@ textarea {
     height: auto !important;
     max-width: none !important;
     max-height: none !important;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width:992px){
+
+.bunga-atas-kiri,
+.bunga-atas-kanan{
+    width:190px;
+}
+
+.bunga-bawah-kiri,
+.bunga-bawah-kanan{
+    width:220px;
+}
+
+}
+
+/* =========================
+   HP
+========================= */
+
+@media (max-width:768px){
+
+.bunga-atas-kiri{
+    width:150px;
+    transform:translate(-38%,-38%);
+}
+
+.bunga-atas-kanan{
+    width:150px;
+    transform:translate(38%,-38%);
+}
+
+.bunga-bawah-kiri{
+    width:170px;
+    transform:translate(-38%,38%);
+}
+
+.bunga-bawah-kanan{
+    width:170px;
+    transform:translate(38%,38%);
+}
+
+}
+
+/* =========================
+   HP KECIL
+========================= */
+
+@media (max-width:480px){
+
+.bunga-atas-kiri{
+    width:120px;
+}
+
+.bunga-atas-kanan{
+    width:120px;
+}
+
+.bunga-bawah-kiri{
+    width:140px;
+}
+
+.bunga-bawah-kanan{
+    width:140px;
+}
+
 }
