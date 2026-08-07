@@ -759,109 +759,128 @@ copyButton.addEventListener(
 
 
 // ==========================================
-// UCAPAN TAMU
+// UCAPAN TAMU MYSQL
 // ==========================================
 
-const wishForm =
-    document.getElementById(
-        "wishForm"
-    );
+const wishForm = document.getElementById("wishForm");
 
-const guestName =
-    document.getElementById(
-        "guestName"
-    );
+const guestName = document.getElementById("guestName");
+const guestMessage = document.getElementById("guestMessage");
+const attendance = document.getElementById("attendance");
+const guestCount = document.getElementById("guestCount");
 
-const guestMessage =
-    document.getElementById(
-        "guestMessage"
-    );
+const wishList = document.getElementById("wishList");
 
-const wishList =
-    document.getElementById(
-        "wishList"
-    );
+async function loadMessages(){
 
+    try{
 
-wishForm.addEventListener(
-    "submit",
-    function (event) {
+        const response = await fetch("api/ambil_pesan.php");
 
-        event.preventDefault();
+        const data = await response.json();
 
+        wishList.innerHTML = "";
 
-        const name =
-            guestName
-                .value
-                .trim();
+        data.forEach(function(item){
 
+            wishList.innerHTML += `
+                <div class="wish-item">
 
-        const message =
-            guestMessage
-                .value
-                .trim();
+                    <strong>${item.nama}</strong>
 
+                    <small>
+                        ${item.kehadiran}
+                        •
+                        ${item.jumlah_tamu} Orang
+                    </small>
 
-        if (
-            name === ""
-            ||
-            message === ""
-        ) {
+                    <p>${item.pesan}</p>
 
-            return;
+                    <span>
+                        ${item.dibuat}
+                    </span>
+
+                </div>
+            `;
+
+        });
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+loadMessages();
+
+wishForm.addEventListener("submit",async function(e){
+
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("nama",guestName.value);
+
+    formData.append("kehadiran",attendance.value);
+
+    formData.append("jumlah_tamu",guestCount.value);
+
+    formData.append("pesan",guestMessage.value);
+
+    try{
+
+        const response = await fetch(
+
+            "api/kirim_pesan.php",
+
+            {
+
+                method:"POST",
+
+                body:formData
+
+            }
+
+        );
+
+        const hasil = await response.json();
+
+        if(hasil.status=="success"){
+
+            guestName.value="";
+
+            guestMessage.value="";
+
+            guestCount.value=1;
+
+            attendance.value="Hadir";
+
+            loadMessages();
 
         }
 
+            setInterval(loadMessages,5000);
+            
 
-        const item =
-            document.createElement(
-                "div"
-            );
+        else{
 
+            alert(hasil.message);
 
-        item.className =
-            "wish-item";
-
-
-        const nameElement =
-            document.createElement(
-                "strong"
-            );
-
-
-        nameElement.textContent =
-            name;
-
-
-        const messageElement =
-            document.createElement(
-                "p"
-            );
-
-
-        messageElement.textContent =
-            message;
-
-
-        item.appendChild(
-            nameElement
-        );
-
-
-        item.appendChild(
-            messageElement
-        );
-
-
-        wishList.prepend(
-            item
-        );
-
-
-        wishForm.reset();
+        }
 
     }
-);
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+});
 
 // ==========================================
 // WEDDING COUNTDOWN
