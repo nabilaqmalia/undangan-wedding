@@ -2534,3 +2534,299 @@ textarea {
 }
 
 }
+
+/* ==========================================================
+   UCAPAN & DOA
+========================================================== */
+
+#wishForm{
+
+    width:min(100%,650px);
+
+    margin:40px auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+#wishForm input,
+#wishForm select,
+#wishForm textarea{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border:1px solid #d8dfd5;
+
+    border-radius:14px;
+
+    background:#fff;
+
+    color:#405047;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.25s;
+
+}
+
+#wishForm textarea{
+
+    min-height:150px;
+
+    resize:vertical;
+
+}
+
+#wishForm input:focus,
+#wishForm select:focus,
+#wishForm textarea:focus{
+
+    border-color:#7d9a82;
+
+    box-shadow:0 0 0 4px rgba(145,165,143,.15);
+
+}
+
+#wishForm button{
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:50px;
+
+    background:#52695a;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#wishForm button:hover{
+
+    background:#405047;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ==========================================================
+   LIST UCAPAN
+========================================================== */
+
+#wishList{
+
+    width:min(100%,700px);
+
+    margin:40px auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.wish-item{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    border:1px solid #e7ece5;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.05);
+
+    animation:fadeWish .4s ease;
+
+}
+
+.wish-item strong{
+
+    display:block;
+
+    font-size:18px;
+
+    color:#52695a;
+
+    margin-bottom:6px;
+
+}
+
+.wish-item small{
+
+    display:block;
+
+    color:#888;
+
+    margin-bottom:10px;
+
+}
+
+.wish-item p{
+
+    line-height:1.8;
+
+    color:#555;
+
+}
+
+.wish-item span{
+
+    display:block;
+
+    margin-top:15px;
+
+    font-size:13px;
+
+    color:#999;
+
+}
+
+
+/* ==========================================================
+   STATISTIK
+========================================================== */
+
+.guest-statistic{
+
+    width:min(100%,700px);
+
+    margin:50px auto;
+
+    padding:25px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+}
+
+.guest-statistic h3{
+
+    grid-column:1/-1;
+
+    text-align:center;
+
+    margin-bottom:10px;
+
+    color:#52695a;
+
+}
+
+.guest-statistic p{
+
+    background:#f8f8f8;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+
+/* ==========================================================
+   LOADING
+========================================================== */
+
+#loadingMessage{
+
+    text-align:center;
+
+    color:#777;
+
+    padding:25px;
+
+}
+
+
+/* ==========================================================
+   ANIMASI
+========================================================== */
+
+@keyframes fadeWish{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:768px){
+
+.guest-statistic{
+
+    grid-template-columns:1fr;
+
+}
+
+#wishForm{
+
+    gap:12px;
+
+}
+
+#wishForm input,
+#wishForm select,
+#wishForm textarea{
+
+    font-size:14px;
+
+}
+
+.wish-item{
+
+    padding:18px;
+
+}
+
+}
+
