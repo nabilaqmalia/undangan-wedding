@@ -759,128 +759,343 @@ copyButton.addEventListener(
 
 
 // ==========================================
-// UCAPAN TAMU MYSQL
+// UCAPAN TAMU - MYSQL
 // ==========================================
 
 const wishForm = document.getElementById("wishForm");
 
 const guestName = document.getElementById("guestName");
-const guestMessage = document.getElementById("guestMessage");
-const attendance = document.getElementById("attendance");
-const guestCount = document.getElementById("guestCount");
 
-const wishList = document.getElementById("wishList");
+const guestMessage =
+    document.getElementById("guestMessage");
 
-async function loadMessages(){
+const wishList =
+    document.getElementById("wishList");
 
-    try{
 
-        const response = await fetch("api/ambil_pesan.php");
+/* ==========================================
+   ESCAPE HTML
+========================================== */
 
-        const data = await response.json();
+function escapeHTML(text) {
 
-        wishList.innerHTML = "";
+    const div = document.createElement("div");
 
-        data.forEach(function(item){
+    div.textContent = text;
 
-            wishList.innerHTML += `
-                <div class="wish-item">
+    return div.innerHTML;
 
-                    <strong>${item.nama}</strong>
+}
 
-                    <small>
-                        ${item.kehadiran}
-                        •
-                        ${item.jumlah_tamu} Orang
-                    </small>
 
-                    <p>${item.pesan}</p>
+/* ==========================================
+   FORMAT TANGGAL
+========================================== */
 
-                    <span>
-                        ${item.dibuat}
-                    </span>
+function formatDate(dateString) {
 
-                </div>
-            `;
+    const date = new Date(
+        dateString.replace(" ", "T")
+    );
 
-        });
+    if (isNaN(date.getTime())) {
+
+        return dateString;
 
     }
 
-    catch(error){
+    return date.toLocaleDateString(
+        "id-ID",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
 
-        console.error(error);
+}
+
+
+/* ==========================================
+   TAMPILKAN UCAPAN
+========================================== */
+
+function displayMessages(data) {
+
+    wishList.innerHTML = "";
+
+    if (!Array.isArray(data) || data.length === 0) {
+
+        wishList.innerHTML = `
+            <div class="wish-item">
+                <p>
+                    Belum ada ucapan.
+                    Jadilah yang pertama memberikan doa.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.forEach(function(item) {
+
+        const article =
+            document.createElement("article");
+
+        article.className = "wish-item";
+
+
+        const name =
+            document.createElement("strong");
+
+        name.textContent =
+            item.nama;
+
+
+        const message =
+            document.createElement("p");
+
+        message.textContent =
+            item.pesan;
+
+
+        const info =
+            document.createElement("small");
+
+        info.textContent =
+            formatDate(item.dibuat);
+
+
+        article.appendChild(name);
+
+        article.appendChild(message);
+
+        article.appendChild(info);
+
+
+        wishList.appendChild(article);
+
+    });
+
+}
+
+
+/* ==========================================
+   AMBIL UCAPAN DARI MYSQL
+========================================== */
+
+async function loadMessages() {
+
+    try {
+
+        const response =
+            await fetch(
+                "api/ambil_pesan.php",
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server mengembalikan error."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!Array.isArray(data)) {
+
+            throw new Error(
+                "Data ucapan tidak valid."
+            );
+
+        }
+
+
+        displayMessages(data);
+
+
+    } catch (error) {
+
+        console.error(
+            "Gagal mengambil ucapan:",
+            error
+        );
+
+
+        wishList.innerHTML = `
+            <div class="wish-item">
+                <p>
+                    Ucapan belum dapat dimuat.
+                    Silakan coba lagi.
+                </p>
+            </div>
+        `;
 
     }
 
 }
 
-loadMessages();
 
-wishForm.addEventListener("submit",async function(e){
+/* ==========================================
+   KIRIM UCAPAN
+========================================== */
 
-    e.preventDefault();
+wishForm.addEventListener(
+    "submit",
+    async function(event) {
 
-    const formData = new FormData();
+        event.preventDefault();
 
-    formData.append("nama",guestName.value);
 
-    formData.append("kehadiran",attendance.value);
+        const nama =
+            guestName.value.trim();
 
-    formData.append("jumlah_tamu",guestCount.value);
 
-    formData.append("pesan",guestMessage.value);
+        const pesan =
+            guestMessage.value.trim();
 
-    try{
 
-        const response = await fetch(
+        if (nama === "") {
 
-            "api/kirim_pesan.php",
+            alert(
+                "Silakan masukkan nama."
+            );
 
-            {
+            guestName.focus();
 
-                method:"POST",
+            return;
 
-                body:formData
+        }
+
+
+        if (pesan === "") {
+
+            alert(
+                "Silakan tuliskan ucapan."
+            );
+
+            guestMessage.focus();
+
+            return;
+
+        }
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "nama",
+            nama
+        );
+
+
+        formData.append(
+            "pesan",
+            pesan
+        );
+
+
+        const button =
+            wishForm.querySelector(
+                "button[type='submit']"
+            );
+
+
+        const originalText =
+            button.textContent;
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Mengirim...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "api/kirim_pesan.php",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                result.status !==
+                "success"
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Ucapan gagal dikirim."
+                );
 
             }
 
-        );
 
-        const hasil = await response.json();
+            wishForm.reset();
 
-        if(hasil.status=="success"){
 
-            guestName.value="";
+            await loadMessages();
 
-            guestMessage.value="";
 
-            guestCount.value=1;
+            alert(
+                "Ucapan berhasil dikirim ❤️"
+            );
 
-            attendance.value="Hadir";
 
-            loadMessages();
+        } catch (error) {
 
-        }
+            console.error(
+                "Gagal mengirim ucapan:",
+                error
+            );
 
-            setInterval(loadMessages,5000);
-            
 
-        else{
+            alert(
+                error.message ||
+                "Ucapan gagal dikirim."
+            );
 
-            alert(hasil.message);
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                originalText;
 
         }
 
     }
+);
 
-    catch(error){
 
-        console.error(error);
+/* ==========================================
+   LOAD SAAT WEBSITE DIBUKA
+========================================== */
 
-    }
-
-});
+loadMessages();
 
 // ==========================================
 // WEDDING COUNTDOWN
